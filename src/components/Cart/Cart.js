@@ -8,16 +8,16 @@ const Cart = (props) => {
         name: 'Sushi',
         amount: 2,
         price: 10.99
-    }].map(item => <li>{item.name}</li>)}</ul>
+    }].map(item => <li key={item.id}>{item.name}</li>)}</ul>
     return (
-        <Modal>
+        <Modal onHideCart={props.onHideCart}>
             {cartItems}
             <div className={styles.total}>
                 <span> Итого</span>
                 <span>49.9</span>
             </div>
             <div className={styles.actions}>
-                <button className={styles['button--alt']}>Закрыть</button>
+                <button className={styles['button--alt']} onClick={props.onHideCart}>Закрыть</button>
                 <button className={styles.button}>Заказать</button>
             </div>
         </Modal>
