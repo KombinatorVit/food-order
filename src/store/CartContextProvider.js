@@ -9,8 +9,8 @@ const defaultCartState = {
 
 const cartReducer = (state, action) => {
     switch (action.type) {
-        case 'ADD_ITEM':
-            const updatedTotalAmount = state.totalAmount + action.item.price *  action.item.amount
+        case 'ADD_ITEM': {
+            const updatedTotalAmount = state.totalAmount + action.item.price * action.item.amount
 
             const existingCartItemIndex = state.items.findIndex((item) => {
                 return item.id === action.item.id
@@ -26,19 +26,44 @@ const cartReducer = (state, action) => {
                 }
                 updatedItems = [...state.items]
                 updatedItems[existingCartItemIndex] = updatedItem
-            } else  {
+            } else {
                 updatedItem = {
                     ...action.item,
                 }
-                updatedItems= state.items.concat(updatedItem)
+                updatedItems = state.items.concat(updatedItem)
             }
 
             return {
-items: updatedItems,
+                items: updatedItems,
                 totalAmount: updatedTotalAmount
             }
-        case  'REMOVE_ITEM':
-            return
+        }
+
+        case  'REMOVE_ITEM': {
+
+
+            const existingCartItemIndex = state.items.findIndex((item) => {
+                return item.id === action.id
+            })
+            const existingCartItem = state.items[existingCartItemIndex]
+            const updatedTotalAmount = state.totalAmount - existingCartItem.price
+            let updatedItems;
+
+            if (existingCartItem.amount === 1) {
+                updatedItems = state.items.filter(item => item.id !== action.id)
+            } else {
+                const updatedItem = {...existingCartItem, amount: existingCartItem.amount - 1}
+                updatedItems = [...state.items]
+                updatedItems[existingCartItemIndex] = updatedItem
+            }
+
+
+            return {
+                items: updatedItems,
+                totalAmount: updatedTotalAmount
+            }
+        }
+
         default :
             return defaultCartState
 
